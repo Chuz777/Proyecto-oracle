@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Inicio - Proyecto Oracle</title>
+    <title>Estacionar - Proyecto Oracle</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
 </head>
 <body>
@@ -16,19 +16,17 @@
         <div class="container-fluid justify-content-center">
             <div class="navbar-nav">
                 <a class="nav-link btn btn-outline-light mx-2" th:href="@{/index}">Inicio</a>
-                <a class="nav-link btn btn-outline-light mx-2" th:href="@{/estacionar}">Estacionar</a>
+                <a class="nav-link btn btn-outline-light mx-2 active" th:href="@{/estacionar}">Estacionar</a>
                 <a class="nav-link btn btn-outline-light mx-2" th:href="@{/visualizar}">Visualizar</a>
                 <a class="nav-link btn btn-outline-light mx-2" th:href="@{/salir}">Salir</a>
             </div>
         </div>
     </nav>
-    <div class="container mt-5">
-        <p class="text-center">Tabla de Estacionamiento.</p>
-    </div>
 
     <!-- Contenido principal -->
     <div class="container mt-5">
-        <p class="text-center">Selecciona una opción del menúparacontinuar.</p>
+        <p class="text-center fs-4">Tabla de Estacionamiento</p>
+        <p class="text-center">Selecciona una opción del menú para continuar.</p>
     </div>
 </body>
 </html>
