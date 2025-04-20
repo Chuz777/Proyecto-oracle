@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Estacionar - Proyecto Oracle</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <!-- Encabezado -->
@@ -27,10 +28,140 @@
     <div class="container mt-5">
         <p class="text-center fs-4">Tabla de Estacionamiento</p>
         <p class="text-center">Selecciona una opción del menú para continuar.</p>
-        
-        
-         <!-- Ene este espacio se coloca lo de la tabla con el oracle -->
-        
+
+        <!-- Botón para abrir modal -->
+        <section th:fragment="estacionarse" class="py-4 mb-4 bg-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">   
+                        <button 
+                            type="button" 
+                            class="btn btn-primary btn-block" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#estacionarse">
+                            <i class="fas fa-plus"></i> Estacionarse
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modal Estacionarse -->
+        <section th:fragment="modalEstacionarse">
+            <div id="estacionarse" 
+                 class="modal fade" 
+                 tabindex="-1" 
+                 aria-labelledby="exampleModalLabel" 
+                 aria-hidden="true">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info text-white">
+                            <h5 class="modal-title">Espacios</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div> 
+                        <form th:action="@{/producto/guardar}" th:object="${producto}"
+                              method="POST" class="was-validated" enctype="multipart/form-data">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="categoria.idCategoria">Estacionamiento</label>
+                                    <select name="categoria.idCategoria" class="form-select">
+                                        <option th:each="c : ${categorias}" 
+                                                th:value="${c.idCategoria}">[[${c.nombre}]]</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nombre">Nombre</label>
+                                    <input type="text" class="form-control" name="nombre" required="true"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="telefono">Telefono</label>
+                                    <input type="text" class="form-control" name="telefono" required="true"/>
+                                </div>
+                                                                
+                                <div class="mb-3">
+                                    <label for="emaila">Email</label>
+                                    <input type="text" class="form-control" name="email" required="true"/>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="placa">Placa</label>
+                                    <input type="text" class="form-control" name="placa" required="true"/>
+                                </div>
+                                
+                                
+                                
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="submit">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tabla de productos -->
+        <section th:fragment="listadoestacionamiento" id="listaestacionamiento">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Lista de espacios</h4>
+                            </div>
+                            <div th:if="${listaestacionamiento != null and !listaestacionamiento.empty}">
+                                <table class="table table-striped table-hover">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Nombre</th>
+                                            <th>Estacionamiento</th>
+                                            <th>Bloque de Estacionamiento</th>
+                                            <th>Placa</th>
+                                            <th>Tarifa</th>
+                                            <th>Activo</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="producto, contador : ${productos}">
+                                            <td>[[${contador.count}]]</td>
+                                            <td>[[${producto.nombre}]]</td>
+                                            <td>[[${producto.descripcion}]]</td>
+                                            <td>[[${producto.precio}]]</td>
+                                            <td>[[${producto.categoria != null ? producto.categoria.descripcion : 'Sin categoría'}]]</td>
+                                            <td th:text="${producto.activo} ? 'Activa' : 'Inactiva'"></td>
+                                            <td>
+                                                <a th:href="@{/producto/eliminar/}+${producto.idProducto}"
+                                                   class="btn btn-danger">
+                                                    <i class="fas fa-trash"></i> Eliminar</a>
+                                                <a th:href="@{/producto/modificar/}+${producto.idProducto}"
+                                                   class="btn btn-success">
+                                                    <i class="fas fa-pencil-alt"></i> Modificar</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-center p-2" th:if="${productos == null or productos.empty}">
+                                <span>[[#{lista.vacia}]]</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center bg-success text-white mb-3">
+                            <div class="card-body">
+                                <h3>Total de Espacios Ocupados</h3>
+                                <h4 class="fs-2"><i class="fas fa-users"></i> [[${totalProductos}]]</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
