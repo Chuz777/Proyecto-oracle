@@ -64,6 +64,12 @@
                                 <label for="email">Email</label>
                                 <input type="email" class="form-control" th:field="*{email}" required />
                             </div>
+                            
+                            <div class="mb-3">
+                                <label for="placa">Placa</label>
+                                <input type="text" class="form-control" th:field="*{placa}" required />
+                            </div>
+                            
                             <div class="mb-3">
                                 <label for="estacionamiento">Estacionamiento</label>
                                 <select class="form-select" th:field="*{estacionamiento}" required>
@@ -106,6 +112,7 @@
                                 <th>Nombre</th>
                                 <th>Número</th>
                                 <th>Email</th>
+                                <th>Placa</th>
                                 <th>Estacionamiento</th>
                                 <th>Bloque</th>
                                 <th>Hora Entrada</th>
@@ -118,6 +125,7 @@
                                 <td th:text="${ticket.nombre}"></td>
                                 <td th:text="${ticket.numero}"></td>
                                 <td th:text="${ticket.email}"></td>
+                                <td th:text="${ticket.placa}"></td>
                                 <td th:text="${ticket.estacionamiento}"></td>
                                 <td th:text="${ticket.bloque}"></td>
                                 <td th:text="${#dates.format(ticket.horaEntrada, 'yyyy-MM-dd HH:mm')}"></td>
