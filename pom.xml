@@ -21,9 +21,13 @@
 
   <properties>
     <java.version>17</java.version>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <dependencies>
+      
     <!-- Web -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -81,7 +85,6 @@
       <optional>true</optional>
     </dependency>
 
-    <!-- Tests -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
@@ -94,30 +97,22 @@
     </dependency>
     
     <dependency>
-    <groupId>jakarta.persistence</groupId>
-    <artifactId>jakarta.persistence-api</artifactId>
-    <version>3.0.0</version>
-</dependency>
-
-<dependency>
-    <groupId>javax.persistence</groupId>
-    <artifactId>javax.persistence-api</artifactId>
-    <version>2.2</version>
-    <scope>provided</scope>
-</dependency>
-
-
-
-
+        <groupId>jakarta.persistence</groupId>
+        <artifactId>jakarta.persistence-api</artifactId>
+        <version>3.1.0</version>
+    </dependency>
+        
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-jdbc</artifactId>
+    </dependency>
 
     <dependency>
-      <groupId>net.xdob.springframework</groupId>
-      <artifactId>spring-jdbc</artifactId>
-      <version>5.3.41</version>
-      <type>jar</type>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
+    
   </dependencies>
-  
   
   <build>
     <resources>
@@ -134,6 +129,8 @@
         <configuration>
           <source>${java.version}</source>
           <target>${java.version}</target>
+          <executable>/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/bin/javac</executable>
+          <fork>true</fork>
           <annotationProcessorPaths>
             <path>
               <groupId>org.projectlombok</groupId>
@@ -147,6 +144,15 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <jvmArguments>--enable-preview</jvmArguments>
+          <excludes>
+            <exclude>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+            </exclude>
+          </excludes>
+        </configuration>
       </plugin>
     </plugins>
   </build>

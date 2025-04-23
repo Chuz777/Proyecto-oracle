@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    
+    <!-- Usando el fragmento head de plantilla.html -->
+    <head th:replace="~{layout/plantilla :: head}"></head>
+    
+    <body>
+        <!-- Usando el fragmento header de plantilla.html -->
+        <header th:replace="~{layout/plantilla :: header}"></header>
+        
+        <!-- Usando el fragmento navbar de plantilla.html -->
+        <nav th:replace="~{layout/plantilla :: navbar}"></nav>
+        
+        <!-- Usando el fragmento mensajes de plantilla.html -->
+        <div th:replace="~{layout/plantilla :: mensajes}"></div>
+        
+         <div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <div class="row">
+                <div class="col-md-8">
+                    <h4><i class="fas fa-parking"></i> Detalle de Estacionamiento</h4>
+                </div>
+                <div class="col-md-4 text-right">
+                    <a th:href="@{/estacionamientos}" class="btn btn-light">
+                        <i class="fas fa-arrow-left"></i> Volver a la lista
+                    </a>
+                    <a th:href="@{'/estacionamientos/editar/' + ${estacionamiento.idEstacionamiento}}" class="btn btn-warning">
+                        <i class="fas fa-edit"></i> Editar
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <!-- Indicador de progreso -->
+            <div class="mb-4">
+                <div class="progress" style="height: 25px;">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                        Paso 1: Estacionamiento creado
+                    </div>
+                    <!-- Barra de progreso para nivel de avance -->
+                    <div class="progress-bar" role="progressbar" 
+                         th:style="'width: ' + (${capacidadActual != null} ? ((${capacidadActual} * 50) / ${estacionamiento.capacidadTotal}) + '%' : '0%') + ';'" 
+                         th:classappend="${niveles != null && !niveles.isEmpty()} ? 'bg-info' : 'bg-primary'">
+                        Paso 2: Agregar niveles
+                    </div>
+                    <div class="progress-bar bg-success" role="progressbar" 
+                         th:style="'width: ' + (${capacidadActual != null && capacidadActual == estacionamiento.capacidadTotal} ? '25%' : '0%') + ';'"
+                         th:if="${capacidadActual != null && capacidadActual == estacionamiento.capacidadTotal}">
+                        ¡Niveles completados!
+                    </div>
+                </div>
+                
+                <!-- Contador de capacidad -->
+                <div class="d-flex justify-content-between mt-1">
+                    <small>Capacidad asignada: <span th:text="${capacidadActual != null ? capacidadActual : 0}">0</span> / <span th:text="${estacionamiento.capacidadTotal}">500</span></small>
+                    <small th:if="${capacidadActual != null && capacidadActual < estacionamiento.capacidadTotal}">
+                        Faltan: <span th:text="${estacionamiento.capacidadTotal - capacidadActual}">500</span> espacios
+                    </small>
+                    <small th:if="${capacidadActual != null && capacidadActual == estacionamiento.capacidadTotal}" class="text-success">
+                        <i class="fas fa-check-circle"></i> Capacidad completa
+                    </small>
+                </div>
+            </div>
+
+            <!-- Alerta cuando no hay niveles -->
+            <div class="alert alert-info" th:if="${niveles == null || niveles.isEmpty()}">
+                <i class="fas fa-info-circle"></i> 
+                <strong>¡Paso siguiente!</strong> Este estacionamiento no tiene niveles. 
+                Por favor, agrega al menos un nivel utilizando el formulario a la derecha.
+            </div>
+
+            <!-- Información básica del estacionamiento -->
+            <div class="row">
+                <div class="col-md-12 mb-4">
+                    <h3 th:text="${estacionamiento.nombre}" class="text-primary mb-0">Nombre del Estacionamiento</h3>
+                    <p class="text-muted" th:text="${estacionamiento.direccion}">Dirección completa</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Columna izquierda: Información principal -->
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Información General</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-sm table-borderless">
+                                <tr>
+                                    <th style="width: 40%">ID:</th>
+                                    <td th:text="${estacionamiento.idEstacionamiento}">1</td>
+                                </tr>
+                                <tr>
+                                    <th>Capacidad Planificada:</th>
+                                    <td th:text="${estacionamiento.capacidadTotal}">100</td>
+                                </tr>
+                                <tr>
+                                    <th>Capacidad Actual (Niveles):</th>
+                                    <td th:text="${capacidadActual != null ? capacidadActual : 0}">0</td>
+                                </tr>
+                                <tr>
+                                    <th>Capacidad Restante:</th>
+                                    <td th:text="${estacionamiento.capacidadTotal - (capacidadActual != null ? capacidadActual : 0)}">100</td>
+                                </tr>
+                                <tr>
+                                    <th>Horario de Apertura:</th>
+                                    <td th:text="${#temporals.format(estacionamiento.horarioApertura, 'dd/MM/yyyy HH:mm')}">01/01/2023 07:00</td>
+                                </tr>
+                                <tr>
+                                    <th>Horario de Cierre:</th>
+                                    <td th:text="${#temporals.format(estacionamiento.horarioCierre, 'dd/MM/yyyy HH:mm')}">01/01/2023 22:00</td>
+                                </tr>
+                            </table>
+                            
+                            <!-- Alerta si la capacidad planificada no coincide con la actual -->
+                            <div class="alert alert-warning mt-3" th:if="${capacidadActual != null && estacionamiento.capacidadTotal != capacidadActual}">
+                                <i class="fas fa-exclamation-triangle"></i> 
+                                La capacidad actual (<span th:text="${capacidadActual}"></span>) no coincide con la capacidad planificada (<span th:text="${estacionamiento.capacidadTotal}"></span>).
+                                <br>
+                                <strong>Faltan:</strong> <span th:text="${estacionamiento.capacidadTotal - capacidadActual}"></span> espacios por distribuir en niveles.
+                            </div>
+                            
+                            <!-- Alerta cuando la capacidad está completa -->
+                            <div class="alert alert-success mt-3" th:if="${capacidadActual != null && capacidadActual == estacionamiento.capacidadTotal}">
+                                <i class="fas fa-check-circle"></i> 
+                                <strong>¡Configuración completa!</strong> La capacidad total ha sido distribuida correctamente en todos los niveles.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Estadísticas de Ocupación -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Estadísticas de Ocupación</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-info mb-3">
+                                <i class="fas fa-info-circle"></i> 
+                                Inicialmente todos los espacios están disponibles. A medida que se registren vehículos, estas estadísticas se actualizarán.
+                            </div>
+
+                            <div class="row text-center">
+                                <div class="col-md-4">
+                                    <h2 class="text-primary" th:text="${cantidadNiveles}">3</h2>
+                                    <p class="text-muted">Niveles</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <h2 class="text-success" id="espaciosDisponibles">--</h2>
+                                    <p class="text-muted">Espacios Disponibles</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <h2 class="text-danger" id="espaciosOcupados">--</h2>
+                                    <p class="text-muted">Espacios Ocupados</p>
+                                </div>
+                            </div>
+
+                            <!-- Progreso de ocupación -->
+                            <div class="mt-3">
+                                <h6>Ocupación total</h6>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" id="barraOcupacion"
+                                         style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                                </div>
+                            </div>
+
+                            <!-- Script para calcular ocupación (ejemplo) -->
+                            <script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        // Obtener datos del modelo
+        const capacidadTotal = [[${estacionamiento.capacidadTotal}]];
+        
+        // Cuando no hay espacios ocupados, todos están disponibles
+        // En este punto inicial, todos los espacios están libres
+        const espaciosOcupados = 0;
+        const espaciosDisponibles = capacidadTotal;
+        const porcentajeOcupacion = 0; // 0% de ocupación
+
+        // Actualizar elementos
+        document.getElementById('espaciosDisponibles').textContent = espaciosDisponibles;
+        document.getElementById('espaciosOcupados').textContent = espaciosOcupados;
+
+        // Actualizar barra de progreso
+        const barraOcupacion = document.getElementById('barraOcupacion');
+        barraOcupacion.style.width = porcentajeOcupacion + '%';
+        barraOcupacion.textContent = porcentajeOcupacion + '%';
+        barraOcupacion.setAttribute('aria-valuenow', porcentajeOcupacion);
+    });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna derecha: Niveles y acciones -->
+                <div class="col-md-6">
+                    <!-- Formulario para agregar nivel - SIEMPRE visible y destacado hasta completar capacidad -->
+                    <div class="card mb-4" th:classappend="${capacidadActual != null && capacidadActual < estacionamiento.capacidadTotal} ? 'border-primary' : ''">
+                        <div class="card-header" th:classappend="${capacidadActual != null && capacidadActual < estacionamiento.capacidadTotal} ? 'bg-primary text-white' : 'bg-light'">
+                            <h5 class="mb-0">
+                                <i class="fas fa-plus-circle" th:if="${capacidadActual != null && capacidadActual < estacionamiento.capacidadTotal}"></i> 
+                                Agregar Nivel
+                                <span class="badge badge-light ml-2" th:if="${capacidadActual != null && capacidadActual < estacionamiento.capacidadTotal}">
+                                    <i class="fas fa-info-circle"></i> Faltan <span th:text="${estacionamiento.capacidadTotal - capacidadActual}">0</span> espacios
+                                </span>
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- Mensaje instructivo para múltiples niveles -->
+                            <div class="alert alert-info mb-3" th:if="${niveles != null && !niveles.isEmpty() && capacidadActual < estacionamiento.capacidadTotal}">
+                                <i class="fas fa-info-circle"></i> 
+                                Puedes seguir agregando más niveles hasta completar la capacidad planificada de <strong th:text="${estacionamiento.capacidadTotal}">500</strong> espacios.
+                                <br>
+                                <strong>Capacidad actual:</strong> <span th:text="${capacidadActual}">250</span> espacios.
+                                <strong>Capacidad restante:</strong> <span th:text="${estacionamiento.capacidadTotal - capacidadActual}">250</span> espacios.
+                            </div>
+                            
+                            <!-- Mensaje de éxito cuando la capacidad está completa -->
+                            <div class="alert alert-success mb-3" th:if="${capacidadActual != null && capacidadActual == estacionamiento.capacidadTotal}">
+                                <i class="fas fa-check-circle"></i> 
+                                ¡Felicidades! Has completado la configuración de niveles para este estacionamiento.
+                                <br>
+                                La capacidad total de <strong th:text="${capacidadActual}">500</strong> espacios ha sido distribuida en <strong th:text="${cantidadNiveles}">2</strong> niveles.
+                            </div>
+
+                            <form th:action="@{/niveles/guardar-en-estacionamiento}" method="post" th:if="${capacidadActual == null || capacidadActual < estacionamiento.capacidadTotal}">
+                                <input type="hidden" name="idEstacionamiento" th:value="${estacionamiento.idEstacionamiento}" />
+
+                                <div class="form-group">
+                                    <label for="numeroNivel">Número de Nivel <span class="text-danger">*</span></label>
+                                    <input type="number" name="numeroNivel" id="numeroNivel" class="form-control" required min="1" 
+                                           th:value="${cantidadNiveles != null ? cantidadNiveles + 1 : 1}" />
+                                    <small class="form-text text-muted">Número identificador del nivel (1 para planta baja, 2 para primer piso, etc.)</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="capacidadNivel">Capacidad del Nivel <span class="text-danger">*</span></label>
+                                    <input type="number" name="capacidadNivel" id="capacidadNivel" class="form-control" required min="1" 
+                                           th:max="${estacionamiento.capacidadTotal - (capacidadActual != null ? capacidadActual : 0)}" />
+                                    <small class="form-text text-muted">
+                                        Número de espacios disponibles en este nivel. 
+                                        Máximo: <span th:text="${estacionamiento.capacidadTotal - (capacidadActual != null ? capacidadActual : 0)}">500</span> espacios.
+                                    </small>
+                                </div>
+
+                                <div class="text-right">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-plus-circle"></i> Agregar Nivel
+                                    </button>
+                                </div>
+                            </form>
+                            
+                            <!-- Mostrar botón para continuar cuando la capacidad está completa -->
+                            <div class="text-center" th:if="${capacidadActual != null && capacidadActual == estacionamiento.capacidadTotal}">
+                                <a th:href="@{'/espacios/estacionamiento/' + ${estacionamiento.idEstacionamiento}}" class="btn btn-success">
+                                    <i class="fas fa-check-circle"></i> Continuar a Espacios
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Listado de niveles -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Niveles</h5>
+                            <span class="badge badge-primary" th:if="${niveles != null}">
+                                <span th:text="${niveles.size()}">0</span> niveles
+                            </span>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="list-group list-group-flush">
+                                <a th:href="@{'/niveles/detalle/' + ${nivel.idNivel}}" class="list-group-item list-group-item-action" 
+                                   th:each="nivel : ${niveles}" th:if="${niveles != null && !niveles.isEmpty()}">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1" th:text="'Nivel ' + ${nivel.numeroNivel}">Nivel 1</h6>
+                                        <small>
+                                            <span class="badge badge-success" th:text="${nivel.capacidadNivel + ' espacios'}">30 espacios</span>
+                                            <span class="badge badge-info">100% disponible</span>
+                                        </small>
+                                    </div>
+                                    <div class="progress mt-2" style="height: 5px;">
+                                        <div class="progress-bar bg-success" role="progressbar" 
+                                             style="width: 100%"
+                                             aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <small class="text-muted">Ver detalle del nivel</small>
+                                </a>
+                                <div class="list-group-item text-center" th:if="${niveles == null || niveles.isEmpty()}">
+                                    <p class="text-muted my-2">No hay niveles registrados</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Acciones rápidas -->
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Acciones Rápidas</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="list-group">
+                                <a th:href="@{'/niveles/estacionamiento/' + ${estacionamiento.idEstacionamiento}}" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-layer-group mr-2"></i> Administrar Niveles
+                                </a>
+                                <a th:href="@{'/espacios/estacionamiento/' + ${estacionamiento.idEstacionamiento}}" 
+                                   th:classappend="${capacidadActual != null && capacidadActual == estacionamiento.capacidadTotal} ? '' : 'disabled'" 
+                                   class="list-group-item list-group-item-action">
+                                    <i class="fas fa-th mr-2"></i> Ver Mapa de Espacios
+                                    <span class="badge badge-warning float-right" th:unless="${capacidadActual != null && capacidadActual == estacionamiento.capacidadTotal}">
+                                        Complete la capacidad primero
+                                    </span>
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action" data-toggle="modal" data-target="#reporteModal">
+                                    <i class="fas fa-chart-bar mr-2"></i> Generar Reporte
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tickets Activos en este Estacionamiento -->
+    <div class="card mt-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="fas fa-ticket-alt"></i> Tickets Activos</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Vehículo</th>
+                            <th>Ubicación</th>
+                            <th>Entrada</th>
+                            <th>Tiempo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Esta sección requeriría datos de tickets activos en este estacionamiento -->
+                        <!-- Por ahora mostraremos un mensaje sin tickets -->
+                        <tr>
+                            <td colspan="6" class="text-center">No hay tickets activos en este momento</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Reporte -->
+<div class="modal fade" id="reporteModal" tabindex="-1" role="dialog" aria-labelledby="reporteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reporteModalLabel">Generar Reporte</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="tipoReporte">Tipo de Reporte</label>
+                        <select class="form-control" id="tipoReporte">
+                            <option value="ocupacion">Ocupación</option>
+                            <option value="ingresos">Ingresos</option>
+                            <option value="tickets">Tickets</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fechaInicio">Fecha Inicio</label>
+                        <input type="date" class="form-control" id="fechaInicio">
+                    </div>
+                    <div class="form-group">
+                        <label for="fechaFin">Fecha Fin</label>
+                        <input type="date" class="form-control" id="fechaFin">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary">Generar</button>
+            </div>
+        </div>
+    </div>
+</div>
+        
+        
+        <!-- Usando el fragmento footer de plantilla.html -->
+        <footer th:replace="~{layout/plantilla :: footer}"></footer>
+        
+    </body>
+</html>

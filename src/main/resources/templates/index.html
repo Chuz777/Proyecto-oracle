@@ -1,32 +1,244 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Inicio - Proyecto Oracle</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-</head>
-<body>
-    <!-- Encabezado -->
-    <header class="bg-primary text-white text-center py-3">
-        <h1>Bienvenido al Sistema de Administración</h1>
-    </header>
-
-    <!-- Barra de navegación con botones -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid justify-content-center">
-            <div class="navbar-nav">
-                <a class="nav-link btn btn-outline-light mx-2" th:href="@{/index}">Inicio</a>
-                <a class="nav-link btn btn-outline-light mx-2" th:href="@{/estacionar}">Estacionar</a>
-                <a class="nav-link btn btn-outline-light mx-2" th:href="@{/visualizar}">Visualizar</a>
-                <a class="nav-link btn btn-outline-light mx-2" th:href="@{/salir}">Salir</a>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    
+    <!-- Usando el fragmento head de plantilla.html -->
+    <head th:replace="~{layout/plantilla :: head}"></head>
+    
+    <body>
+        <!-- Usando el fragmento header de plantilla.html -->
+        <header th:replace="~{layout/plantilla :: header}"></header>
+        
+        <!-- Usando el fragmento navbar de plantilla.html -->
+        <nav th:replace="~{layout/plantilla :: navbar}"></nav>
+        
+        <!-- Usando el fragmento mensajes de plantilla.html -->
+        <div th:replace="~{layout/plantilla :: mensajes}"></div>
+        
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Panel de resumen / Dashboard -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="mb-0"><i class="fas fa-tachometer-alt mr-2"></i> Dashboard de Estacionamiento</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <!-- Estadísticas resumidas -->
+                                <div class="col-md-3">
+                                    <div class="card bg-info text-white mb-3">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title"><i class="fas fa-parking mr-2"></i> Espacios Disponibles</h5>
+                                            <h2 th:text="${espaciosDisponibles}">0</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card bg-success text-white mb-3">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title"><i class="fas fa-car mr-2"></i> Vehículos Actuales</h5>
+                                            <h2 th:text="${vehiculosEstacionados}">0</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card bg-warning text-dark mb-3">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title"><i class="fas fa-users mr-2"></i> Clientes Registrados</h5>
+                                            <h2 th:text="${clientesRegistrados}">0</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card bg-danger text-white mb-3">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title"><i class="fas fa-ticket-alt mr-2"></i> Tickets Activos</h5>
+                                            <h2 th:text="${ticketsActivos}">0</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Gráfico de ocupación por nivel (simulado) -->
+                            <div class="row mt-4">
+                                <div class="col-md-12">
+                                    <h5>Ocupación por Nivel</h5>
+                                    <div class="progress mb-2" th:each="nivel : ${niveles}" th:if="${niveles != null}">
+                                        <div class="progress-bar bg-success" role="progressbar" 
+                                             th:style="'width: ' + ${nivel.porcentajeOcupacion} + '%'" 
+                                             th:text="${nivel.numeroNivel + ' - ' + nivel.porcentajeOcupacion + '%'}">
+                                             Nivel 1 - 50%
+                                        </div>
+                                    </div>
+                                    <div class="text-center" th:if="${niveles == null || niveles.isEmpty()}">
+                                        <p class="text-muted">No hay datos de ocupación disponibles</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <!-- Accesos rápidos -->
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0"><i class="fas fa-bolt mr-2"></i> Accesos Rápidos</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="list-group">
+                                        <a th:href="@{/tickets/nuevo}" class="list-group-item list-group-item-action">
+                                            <i class="fas fa-ticket-alt mr-2"></i> Crear Nuevo Ticket
+                                        </a>
+                                        <a th:href="@{/tickets/activos}" class="list-group-item list-group-item-action">
+                                            <i class="fas fa-clock mr-2"></i> Ver Tickets Activos
+                                        </a>
+                                        <a th:href="@{/clientes/nuevo}" class="list-group-item list-group-item-action">
+                                            <i class="fas fa-user-plus mr-2"></i> Registrar Nuevo Cliente
+                                        </a>
+                                        <a th:href="@{/vehiculos/nuevo}" class="list-group-item list-group-item-action">
+                                            <i class="fas fa-car mr-2"></i> Registrar Nuevo Vehículo
+                                        </a>
+                                        <a th:href="@{/pagos/nuevo}" class="list-group-item list-group-item-action">
+                                            <i class="fas fa-money-bill-wave mr-2"></i> Procesar Nuevo Pago
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Entradas Recientes -->
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0"><i class="fas fa-history mr-2"></i> Entradas Recientes</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>Ticket</th>
+                                                    <th>Placa</th>
+                                                    <th>Hora Entrada</th>
+                                                    <th>Ubicación</th>
+                                                    <th>Acción</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="ticket : ${ticketsRecientes}" th:if="${ticketsRecientes != null}">
+                                                    <td th:text="${ticket.idTicket}">1</td>
+                                                    <td th:text="${ticket.vehiculo != null ? ticket.vehiculo.numeroPlaca : '-'}">ABC-123</td>
+                                                    <td th:text="${#temporals.format(ticket.fechaHoraEntrada, 'dd/MM/yyyy HH:mm')}">01/01/2023 14:30</td>
+                                                    <td th:text="${ticket.espacio != null ? (ticket.espacio.nivel.numeroNivel + '-' + ticket.espacio.numeroEspacio) : '-'}">1-15</td>
+                                                    <td>
+                                                        <a th:href="@{'/tickets/editar/' + ${ticket.idTicket}}" class="btn btn-sm btn-primary">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                <tr th:if="${ticketsRecientes == null || ticketsRecientes.isEmpty()}">
+                                                    <td colspan="5" class="text-center">No hay entradas recientes</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="text-right mt-2">
+                                        <a th:href="@{/tickets}" class="btn btn-outline-primary btn-sm">Ver todos</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Búsqueda rápida -->
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0"><i class="fas fa-search mr-2"></i> Búsqueda Rápida</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="card">
+                                                <div class="card-header bg-light">
+                                                    <h6 class="mb-0">Buscar Vehículo por Placa</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <form th:action="@{/vehiculos/buscar-placa}" method="get">
+                                                        <div class="input-group">
+                                                            <input type="text" name="numeroPlaca" class="form-control" placeholder="Ingrese número de placa" required>
+                                                            <div class="input-group-append">
+                                                                <button class="btn btn-primary" type="submit">
+                                                                    <i class="fas fa-search"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="card">
+                                                <div class="card-header bg-light">
+                                                    <h6 class="mb-0">Buscar Cliente por Apellido</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <form th:action="@{/clientes/buscar}" method="get">
+                                                        <div class="input-group">
+                                                            <input type="text" name="apellido" class="form-control" placeholder="Ingrese apellido" required>
+                                                            <div class="input-group-append">
+                                                                <button class="btn btn-primary" type="submit">
+                                                                    <i class="fas fa-search"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="card">
+                                                <div class="card-header bg-light">
+                                                    <h6 class="mb-0">Buscar Ticket</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <form th:action="@{/tickets/}" method="get" id="buscarTicketForm">
+                                                        <div class="input-group">
+                                                            <input type="number" name="idTicket" class="form-control" placeholder="Ingrese ID de ticket" required>
+                                                            <div class="input-group-append">
+                                                                <button class="btn btn-primary" type="submit">
+                                                                    <i class="fas fa-search"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                    <script>
+                                                        document.getElementById('buscarTicketForm').onsubmit = function(e) {
+                                                            e.preventDefault();
+                                                            const ticketId = this.elements['idTicket'].value;
+                                                            if (ticketId) {
+                                                                window.location.href = '/tickets/editar/' + ticketId;
+                                                            }
+                                                        };
+                                                    </script>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </nav>
-
-    <!-- Contenido principal -->
-    <div class="container mt-5">
-        <p class="text-center">Selecciona una opción del menú para continuar.</p>
-    </div>
-</body>
-
+        
+        <!-- Usando el fragmento footer de plantilla.html -->
+        <footer th:replace="~{layout/plantilla :: footer}"></footer>
+        
+    </body>
 </html>

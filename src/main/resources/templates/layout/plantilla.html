@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    
+    <!-- Fragmento para la sección head con metadatos y recursos CSS/JS -->
+    <head th:fragment="head">
+        <title>Sistema de Estacionamiento</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        
+        <!-- Scripts para el uso de bootstrap -->
+        <!-- Scripts para el uso de bootstrap 5 -->
+        <link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet"/>
+        <link th:href="@{/webjars/font-awesome/6.4.0/css/all.min.css}" rel="stylesheet"/>
+        <script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+        <script th:src="@{/webjars/bootstrap/5.3.2/js/bootstrap.bundle.min.js}"></script>
+        <script th:src="@{/js/rutinas.js}"></script>
+        <script th:src="@{/js/rutinas.js}"></script>
+        
+        <!-- Script para usar el styles.css -->
+        <link th:href="@{/css/styles.css}" rel="stylesheet"/>
+    </head>
+    
+    <body>
+        <!-- Fragmento para el header -->
+        <header th:fragment="header" class="bg-dark text-white text-center py-3">
+            <h1>Sistema de Administración de Estacionamiento</h1>
+        </header>
+        
+        <!-- Fragmento para la barra de navegación -->
+        <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-secondary">
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/}">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/estacionamientos}">Estacionamientos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/niveles}">Niveles</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/espacios}">Espacios</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/clientes}">Clientes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/vehiculos}">Vehículos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/tickets}">Tickets</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/pagos}">Pagos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/tarifas}">Tarifas</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Fragmento para mensajes de error/éxito -->
+        <div th:fragment="mensajes" class="container mt-3">
+            <div class="alert alert-success alert-dismissible fade show" th:if="${mensaje != null}">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <span th:text="${mensaje}"></span>
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show" th:if="${error != null}">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <span th:text="${error}"></span>
+            </div>
+        </div>
+        
+        <!-- Fragmento para el pie de página -->
+        <footer th:fragment="footer" class="bg-dark text-white text-center py-3 mt-5">
+            <p>Sistema de Administración de Estacionamiento &copy; 2025</p>
+        </footer>
+        
+        
+        </div>
+    </body>
+</html>
