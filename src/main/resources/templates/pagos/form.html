@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo Pago</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1>Nuevo Pago</h1>
+    <form action="/pagos/guardar" method="post">
+        <div class="form-group">
+            <label for="ticket">Ticket:</label>
+            <select id="ticket" name="ticket" class="form-control">
+                <!-- Aquí se deben cargar los tickets desde el backend -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="tarifa">Tarifa:</label>
+            <select id="tarifa" name="tarifa" class="form-control">
+                <!-- Aquí se deben cargar las tarifas desde el backend -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="empleado">Empleado:</label>
+            <select id="empleado" name="empleado" class="form-control">
+                <!-- Aquí se deben cargar los empleados desde el backend -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="fechaPago">Fecha de Pago:</label>
+            <input type="date" id="fechaPago" name="fechaPago" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="montoTotal">Monto Total:</label>
+            <input type="number" id="montoTotal" name="montoTotal" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-success">Procesar Pago</button>
+    </

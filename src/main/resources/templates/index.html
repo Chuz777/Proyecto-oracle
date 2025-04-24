@@ -89,26 +89,37 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="list-group">
-                                        <a th:href="@{/tickets/nuevo}" class="list-group-item list-group-item-action">
-                                            <i class="fas fa-ticket-alt mr-2"></i> Crear Nuevo Ticket
+                                        <a <button type="button" class="list-group-item list-group-item-action" data-toggle="modal" data-target="#ticketModal">
+                            <i class="fas fa-ticket-alt mr-2"></i> Crear Nuevo Ticket
+                        </button>
+
                                         </a>
                                         <a th:href="@{/tickets/activos}" class="list-group-item list-group-item-action">
                                             <i class="fas fa-clock mr-2"></i> Ver Tickets Activos
                                         </a>
-                                        <a th:href="@{/clientes/nuevo}" class="list-group-item list-group-item-action">
-                                            <i class="fas fa-user-plus mr-2"></i> Registrar Nuevo Cliente
+                                        <a 
+                                            <button type="button" class="list-group-item list-group-item-action" data-toggle="modal" data-target="#clienteModal">
+                                                <i class="fas fa-user-plus mr-2"></i> Registrar Nuevo Cliente
+                                            </button>
+ 
                                         </a>
-                                        <a th:href="@{/vehiculos/nuevo}" class="list-group-item list-group-item-action">
-                                            <i class="fas fa-car mr-2"></i> Registrar Nuevo Vehículo
+                                        <a 
+                                            <button type="button" class="list-group-item list-group-item-action" data-toggle="modal" data-target="#vehiculoModal">
+                                                <i class="fas fa-car mr-2"></i> Registrar Nuevo Vehículo
+                                            </button>
+
                                         </a>
-                                        <a th:href="@{/pagos/nuevo}" class="list-group-item list-group-item-action">
-                                            <i class="fas fa-money-bill-wave mr-2"></i> Procesar Nuevo Pago
+                                        <a 
+                                            <button type="button" class="list-group-item list-group-item-action" data-toggle="modal" data-target="#pagoModal">
+                                                <i class="fas fa-money-bill-wave mr-2"></i> Procesar Nuevo Pago
+                                            </button>
+      
                                         </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
+                                              
                         <!-- Entradas Recientes -->
                         <div class="col-md-6">
                             <div class="card">
@@ -153,6 +164,197 @@
                         </div>
                     </div>
                     
+                    
+                    
+                    
+<!-- Modal para crear nuevo ticket -->
+    <div class="modal fade" id="ticketModal" tabindex="-1" role="dialog" aria-labelledby="ticketModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ticketModalLabel">Nuevo Ticket</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/tickets/guardar" method="post">
+                        <div class="form-group">
+                            <label for="vehiculo">Vehículo:</label>
+                            <select id="vehiculo" name="vehiculo" class="form-control">
+                                <!-- Aquí se deben cargar los vehículos desde el backend -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="espacio">Espacio:</label>
+                            <select id="espacio" name="espacio" class="form-control">
+                                <!-- Aquí se deben cargar los espacios disponibles desde el backend -->
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-success">Guardar Ticket</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        
+
+
+<!-- Referencia a Bootstrap JS y jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+
+
+
+<!-- Modal para registrar nuevo cliente -->
+    <div class="modal fade" id="clienteModal" tabindex="-1" role="dialog" aria-labelledby="clienteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="clienteModalLabel">Registrar Nuevo Cliente</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/clientes/guardar" method="post">
+                        <div class="form-group">
+                            <label for="nombre">Nombre:</label>
+                            <input type="text" id="nombre" name="nombre" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="apellido">Apellido:</label>
+                            <input type="text" id="apellido" name="apellido" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telefono">Teléfono:</label>
+                            <input type="text" id="telefono" name="telefono" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">Guardar Cliente</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Referencia a Bootstrap JS y jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+                   
+    <!-- Modal para registrar nuevo vehículo -->
+    <div class="modal fade" id="vehiculoModal" tabindex="-1" role="dialog" aria-labelledby="vehiculoModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="vehiculoModalLabel">Registrar Nuevo Vehículo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/vehiculos/guardar" method="post">
+                        <div class="form-group">
+                           Cliente:</label>
+                            <select id="cliente" name="cliente" class="form-control">
+                                <!-- Aquí se deben cargar los clientes desde el backend -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="numeroPlaca">Número de Placa:</label>
+                            <input type="text" id="numeroPlaca" name="numeroPlaca" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipoVehiculo">Tipo de Vehículo:</label>
+                            <input type="text" id="tipoVehiculo" name="tipoVehiculo" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipoEnergia">Tipo de Energía:</label>
+                            <input type="text" id="tipoEnergia" name="tipoEnergia" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">Guardar Vehículo</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Referencia a Bootstrap JS y jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    
+    
+    
+    
+    <!-- Modal para registrar nuevo pago -->
+<div class="modal fade" id="#pagoModal" tabindex="-1" aria-labelledby="pagoModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    
+      <div class="modal-header">
+        <h5 class="modal-title" id="pagoModalLabel">Registrar Nuevo Pago</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      
+      <form action="/pagos/guardar" method="post">
+        <div class="modal-body">
+        
+          <div class="mb-3">
+            <label for="ticket" class="form-label">Ticket:</label>
+            <select id="ticket" name="ticket" class="form-select" required>
+              <!-- Opciones cargadas desde el backend -->
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="tarifa" class="form-label">Tarifa:</label>
+            <select id="tarifa" name="tarifa" class="form-select" required>
+              <!-- Opciones cargadas desde el backend -->
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="empleado" class="form-label">Empleado:</label>
+            <select id="empleado" name="empleado" class="form-select" required>
+              <!-- Opciones cargadas desde el backend -->
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="fechaPago" class="form-label">Fecha de Pago:</label>
+            <input type="date" id="fechaPago" name="fechaPago" class="form-control" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="montoTotal" class="form-label">Monto Total:</label>
+            <input type="number" id="montoTotal" name="montoTotal" class="form-control" required>
+          </div>
+
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-success">Guardar Pago</button>
+        </div>
+      </form>
+      
+    </div>
+  </div>
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    
+    
                     <!-- Búsqueda rápida -->
                     <div class="row mt-4">
                         <div class="col-md-12">

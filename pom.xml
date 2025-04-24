@@ -129,8 +129,6 @@
         <configuration>
           <source>${java.version}</source>
           <target>${java.version}</target>
-          <executable>/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/bin/javac</executable>
-          <fork>true</fork>
           <annotationProcessorPaths>
             <path>
               <groupId>org.projectlombok</groupId>

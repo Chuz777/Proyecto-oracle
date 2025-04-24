@@ -1,7 +1,11 @@
 package com.oracle.service;
 
+import com.oracle.domain.Espacio;
 import com.oracle.domain.Ticket;
+import com.oracle.domain.Vehiculo;
+import com.oracle.repository.EspacioRepository;
 import com.oracle.repository.TicketRepository;
+import com.oracle.repository.VehiculoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,9 +17,38 @@ import java.util.Optional;
 @Service
 public class TicketService {
 
-    private final TicketRepository ticketRepository;
+    
+    @Autowired
+    private TicketRepository ticketRepository;
 
     @Autowired
+    private VehiculoRepository vehiculoRepository;
+
+    @Autowired
+    private EspacioRepository espacioRepository;
+
+    @Transactional
+    public Ticket crearTicket(Long idVehiculo, Long idEspacio) {
+        Vehiculo vehiculo = vehiculoRepository.findById(idVehiculo).orElseThrow(() -> new RuntimeException("Vehículo no encontrado"));
+        Espacio espacio = espacioRepository.findById(idEspacio).orElseThrow(() -> new RuntimeException("Espacio no encontrado"));
+
+        Ticket ticket = new Ticket();
+        ticket.setFechaHoraEntrada(LocalDateTime.now());
+        ticket.setEstado("Activo");
+        ticket.setVehiculo(vehiculo);
+        ticket.setEspacio(espacio);
+
+        return ticketRepository.save(ticket);
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    
     public TicketService(TicketRepository ticketRepository) {
         this.ticketRepository = ticketRepository;
     }

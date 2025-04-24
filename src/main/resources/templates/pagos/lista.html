@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Pagos</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1>Lista de Pagos</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Ticket</th>
+                <th>Tarifa</th>
+                <th>Empleado</th>
+                <th>Fecha de Pago</th>
+                <th>Monto Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="pago : ${pagos}">
+                <td th:text="${pago.idPago}"></td>
+                <td th:text="${pago.ticket.idTicket}"></td>
+                <td th:text="${pago.tarifa.tipoTarifa}"></td>
+                <td th:text="${pago.empleado.nombre}"></td>
+                <td th:text="${#dates.format(pago.fechaPago, 'dd/MM/yyyy')}"></td>
+                <td th:text="${pago.montoTotal}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
