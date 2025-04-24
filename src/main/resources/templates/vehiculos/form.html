@@ -22,29 +22,12 @@
             <input type="text" id="tipoEnergia" name="tipoEnergia" class="form-control" required>
         </div>
         <div class="form-group">
-            <label for="clienteId">ID del Cliente:</label>
-            <input type="number" id="clienteId" name="clienteId" class="form-control" required>
+            <label for="cliente">ID del Cliente:</label>
+            <input type="number" id="idCliente" name="idCliente" class="form-control" required>
         </div>
         <button type="submit" class="btn btn-success">Guardar Vehículo</button>
 
 </form>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script>
-        $('#vehiculoForm').on('submit', function(event) {
-            event.preventDefault();
-            $.ajax({
-                url: '/vehiculos/guardar',
-                type: 'POST',
-                data: $(this).serialize(),
-                success: function(response) {
-                    alert('Vehículo guardado con éxito');
-                    location.reload();
-                },
-                error: function(error) {
-                    alert('Error al guardar el vehículo');
-                }
-            });
-        });
-    </script>
+    
 </body>
 </html>
