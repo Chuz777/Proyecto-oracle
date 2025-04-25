@@ -121,6 +121,7 @@ public class VehiculoController {
         model.addAttribute("sinUso", true);
         return "vehiculos/lista";
     }
+    
 
     @GetMapping("/buscar-placa")
     public String buscarVehiculoPorPlaca(@RequestParam String numeroPlaca, Model model) {

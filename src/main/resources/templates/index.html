@@ -250,48 +250,51 @@
 
 
                    
-    <!-- Modal para registrar nuevo vehículo -->
-    <div class="modal fade" id="vehiculoModal" tabindex="-1" role="dialog" aria-labelledby="vehiculoModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="vehiculoModalLabel">Registrar Nuevo Vehículo</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="/vehiculos/guardar" method="post">
+   <!-- Modal para registrar nuevo vehículo -->
+<div class="modal fade" id="vehiculoModal" tabindex="-1" role="dialog" aria-labelledby="vehiculoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="vehiculoModalLabel">Registrar Nuevo Vehículo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/vehiculos/guardar" method="post">
+                    <div class="form-group">
                         <label for="cliente">Cliente:</label>
                         <select id="cliente" name="cliente" class="form-control">
-
-                            <!-- Aquí se deben cargar los clientes desde el backend -->
+                            <option value="" disabled selected>Seleccione un cliente</option>
+                            <option th:each="cliente : ${clientes}"
+                                    th:value="${cliente.idCliente}"
+                                th:text="${cliente.nombre + ' ' + cliente.apellido}">
+                            </option>
                         </select>
-                </div>
-                        <div class="form-group">
-                            <label for="numeroPlaca">Número de Placa:</label>
-                            <input type="text" id="numeroPlaca" name="numeroPlaca" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="tipoVehiculo">Tipo de Vehículo:</label>
-                            <input type="text" id="tipoVehiculo" name="tipoVehiculo" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="tipoEnergia">Tipo de Energía:</label>
-                            <input type="text" id="tipoEnergia" name="tipoEnergia" class="form-control" required>
-                        </div>
-                        <button type="submit" class="btn btn-success">Guardar Vehículo</button>
-                    </form>
-                </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="numeroPlaca">Número de Placa:</label>
+                        <input type="text" id="numeroPlaca" name="numeroPlaca" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipoVehiculo">Tipo de Vehículo:</label>
+                        <input type="text" id="tipoVehiculo" name="tipoVehiculo" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipoEnergia">Tipo de Energía:</label>
+                        <input type="text" id="tipoEnergia" name="tipoEnergia" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Guardar Vehículo</button>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Referencia a Bootstrap JS y jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+<!-- Referencia a Bootstrap JS y jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     
     
     

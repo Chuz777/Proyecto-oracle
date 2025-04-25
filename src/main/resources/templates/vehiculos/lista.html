@@ -16,7 +16,7 @@
         <tbody>
             <tr th:each="vehiculo : ${vehiculos}">
                 <td th:text="${vehiculo.idVehiculo}"></td>
-                <td th:text="${vehiculo.cliente.nombre}"></td>
+                <td th:text="${vehiculo.cliente != null ? vehiculo.cliente.nombre : 'Sin cliente'}"></td>
                 <td th:text="${vehiculo.numeroPlaca}"></td>
                 <td th:text="${vehiculo.tipoVehiculo}"></td>
                 <td th:text="${vehiculo.tipoEnergia}"></td>

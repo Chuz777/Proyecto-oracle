@@ -40,9 +40,12 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model) {
         // Obtener datos para el dashboard
+        
         long clientesRegistrados = clienteService.findAll().size();
         List<Ticket> ticketsActivos = ticketService.findTicketsActivosSinSalida();
         List<Nivel> niveles = nivelService.findAll();
+        
+        
         
         // Preparar datos para gráfico de ocupación por nivel
         List<Map<String, Object>> nivelesOcupacion = new ArrayList<>();
@@ -80,6 +83,7 @@ public class HomeController {
         List<?> vehiculosEstacionados = vehiculoService.findVehiculosEstacionados();
         
         // Agregar atributos al modelo para la vista
+        model.addAttribute("clientes", clienteService.findAll());
         model.addAttribute("espaciosDisponibles", espaciosDisponibles);
         model.addAttribute("vehiculosEstacionados", vehiculosEstacionados.size());
         model.addAttribute("clientesRegistrados", clientesRegistrados);
